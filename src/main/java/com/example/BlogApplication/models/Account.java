@@ -5,33 +5,29 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
-public class Post {
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String password;
 
-    private String title;
-
-    @Column(columnDefinition = "TEXT")
-    private String body;
-
-    private LocalDateTime createdAt;
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "account_id", referencedColumnName = "id", nullable = false)
-    private Account account;
+    @OneToMany(mappedBy = "account")
+    private List<Post> posts;
 }
